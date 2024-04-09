@@ -109,9 +109,13 @@ static void xilinx_eeprom_legacy_cleanup(char *eeprom, int size)
 			continue;
 		}
 
-		/* Convert strings to lower case */
-		if (byte >= 'A' && byte <= 'Z')
+		/* Convert strings to lower case but ignore MAC address */
+		if ((i < offsetof(struct xilinx_legacy_format, eth_mac) ||
+		     i >= offsetof(struct xilinx_legacy_format, unused1)) &&
+		     (byte >= 'A' && byte <= 'Z')) {
 			eeprom[i] = byte + 'a' - 'A';
+		}
+			
 	}
 }
 
